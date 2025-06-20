@@ -1,0 +1,48 @@
+<launch>
+	<node name="joy_node" pkg="joy" type="joy_node" />
+	<node name="param" pkg="dynamixelcontrol" type="param" output="screen">
+		<param name="dev" value="/dev/ttyUSB0"/>
+	</node> 
+	    <!-- Fast Tomato Detection Parameters -->
+    <arg name="camera_id" default="0" />
+    <arg name="model_path" default="yolov8n.pt" />
+    <arg name="custom_model_path" default="" />
+    <arg name="confidence_threshold" default="0.1" />
+    <arg name="iou_threshold" default="0.45" />
+    
+    <!-- Performance tuning parameters -->
+    <arg name="max_fps" default="15" />
+    <arg name="process_every_nth_frame" default="1" />
+    <arg name="use_threading" default="true" />
+    <arg name="use_simple_color_filter" default="false" />
+    
+    <!-- Display parameters -->
+    <arg name="show_camera_window" default="true" />
+    <arg name="publish_image" default="true" />
+    
+    <!-- Fast Tomato Detector Node -->
+    <node name="optimized_tomato_detector" pkg="yolo_detection" type="optimized_tomato_detector.py" output="screen">
+        <param name="camera_id" value="$(arg camera_id)" />
+        <param name="model_path" value="$(arg model_path)" />
+        <param name="custom_model_path" value="$(arg custom_model_path)" />
+        <param name="confidence_threshold" value="$(arg confidence_threshold)" />
+        <param name="iou_threshold" value="$(arg iou_threshold)" />
+        
+        <!-- Performance parameters -->
+        <param name="max_fps" value="$(arg max_fps)" />
+        <param name="process_every_nth_frame" value="$(arg process_every_nth_frame)" />
+        <param name="use_threading" value="$(arg use_threading)" />
+        <param name="use_simple_color_filter" value="$(arg use_simple_color_filter)" />
+        
+        <!-- Display parameters -->
+        <param name="show_camera_window" value="$(arg show_camera_window)" />
+        <param name="publish_image" value="$(arg publish_image)" />
+    </node>
+    
+    <!-- Bounding Box Listener -->
+    <node name="tomato_listener" pkg="yolo_detection" type="bounding_box_listener" output="screen">
+        <remap from="/yolo_detections" to="/tomato_detections" />
+    </node>
+    
+</launch>
+

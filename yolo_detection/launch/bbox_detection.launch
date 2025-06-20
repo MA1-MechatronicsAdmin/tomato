@@ -1,0 +1,7 @@
+<launch>
+  <!-- Python YOLOv8 node -->
+  <node name="yolov8_bbox_publisher" pkg="try" type="yolov8_bbox_publisher.py" output="screen" />
+
+  <!-- C++ bounding box subscriber node -->
+  <node name="bbox_listener_node" pkg="try" type="bbox_listener_node" output="screen" />
+</launch>

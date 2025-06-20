@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Enhanced Tomato Detection Parameters -->
+    <arg name="camera_id" default="0" />
+    <arg name="model_path" default="yolov8m.pt" />
+    <arg name="custom_model_path" default="" />
+    <arg name="confidence_threshold" default="0.1" />
+    <arg name="iou_threshold" default="0.3" />
+    <arg name="publish_image" default="true" />
+    <arg name="show_camera_window" default="true" />
+    
+    <!-- Tomato-specific parameters -->
+    <arg name="use_color_filtering" default="true" />
+    <arg name="use_multi_scale" default="true" />
+    <arg name="use_augmentation" default="true" />
+    <arg name="merge_overlapping" default="true" />
+    <arg name="min_detection_size" default="10" />
+    
+    <!-- Enhanced Tomato Detector Node -->
+    <node name="enhanced_tomato_detector" pkg="yolo_detection" type="enhanced_tomato_detector.py" output="screen">
+        <param name="camera_id" value="$(arg camera_id)" />
+        <param name="model_path" value="$(arg model_path)" />
+        <param name="custom_model_path" value="$(arg custom_model_path)" />
+        <param name="confidence_threshold" value="$(arg confidence_threshold)" />
+        <param name="iou_threshold" value="$(arg iou_threshold)" />
+        <param name="publish_image" value="$(arg publish_image)" />
+        <param name="show_camera_window" value="$(arg show_camera_window)" />
+        
+        <!-- Tomato-specific parameters -->
+        <param name="use_color_filtering" value="$(arg use_color_filtering)" />
+        <param name="use_multi_scale" value="$(arg use_multi_scale)" />
+        <param name="use_augmentation" value="$(arg use_augmentation)" />
+        <param name="merge_overlapping" value="$(arg merge_overlapping)" />
+        <param name="min_detection_size" value="$(arg min_detection_size)" />
+    </node>
+    
+    <!-- Enhanced Bounding Box Listener -->
+    <node name="tomato_listener" pkg="yolo_detection" type="bounding_box_listener" output="screen">
+        <remap from="/yolo_detections" to="/tomato_detections" />
+    </node>
+    
+    <!-- Optional: Image view for debugging -->
+    <node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+        <remap from="image" to="/tomato_image" />
+        <param name="autosize" value="true" />
+    </node>
+    
+    <!-- Optional: RQT for parameter tuning -->
+    <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" />
+    
+</launch>

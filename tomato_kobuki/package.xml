@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>tomato_kobuki</name>
+  <version>0.0.0</version>
+  <description>The tomato_kobuki package</description>
+
+  <maintainer email="hoge@gmail.com">hoge</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <depend>kobuki_msgs</depend>
+  <depend>geometry_msgs</depend>
+
+</package>

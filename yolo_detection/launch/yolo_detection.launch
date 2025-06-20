@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- YOLO Detection Parameters -->
+    <arg name="camera_id" default="0" />
+    <arg name="model_path" default="yolov8n.pt" />
+    <arg name="confidence_threshold" default="0.1" />
+    <arg name="publish_image" default="true" />
+    <arg name="show_camera_window" default="true" />
+    
+    <!-- Get package path -->
+    <arg name="package_path" default="$(find yolo_detection)" />
+    
+    <!-- YOLO Detector Node (Python) -->
+    <node name="yolo_detector" pkg="yolo_detection" type="yolo_detector.py" output="screen">
+        <param name="camera_id" value="$(arg camera_id)" />
+        <param name="model_path" value="$(arg model_path)" />
+        <param name="package_path" value="$(arg package_path)" />
+        <param name="confidence_threshold" value="$(arg confidence_threshold)" />
+        <param name="publish_image" value="$(arg publish_image)" />
+        <param name="show_camera_window" value="$(arg show_camera_window)" />
+    </node>
+    
+    <!-- Bounding Box Listener Node (C++) -->
+    <node name="bounding_box_listener" pkg="yolo_detection" type="bounding_box_listener" output="screen" />
+    
+    <!-- Optional: RViz for visualization -->
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find yolo_detection)/config/yolo_detection.rviz" /> -->
+    
+</launch>

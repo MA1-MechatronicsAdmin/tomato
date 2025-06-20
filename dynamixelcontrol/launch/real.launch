@@ -1,0 +1,31 @@
+<launch>
+    <arg name="model_path" default="yolov8n.pt" />
+	<node name="joy_node" pkg="joy" type="joy_node" />
+	<node name="param2" pkg="dynamixelcontrol" type="param2" output="screen">
+		<param name="dev" value="/dev/ttyUSB0"/>
+	</node> 
+    <!-- RealSense Tomato Detector Node -->
+    <node name="realsense_tomato_detector" pkg="yolo_detection" type="realsense_tomato_detector.py" output="screen">
+        <!-- YOLOv8 Model Parameters -->
+        <param name="model_path" value="$(arg model_path)" />
+        <param name="confidence_threshold" value="0.1" />
+        <param name="tomato_class_name" value="tomato" />
+        
+        <!-- Camera Parameters -->
+        <param name="image_width" value="640" />
+        <param name="image_height" value="480" />
+        <param name="fps" value="30" />
+        
+        <!-- Camera Transformation Parameters -->
+        <param name="camera_tilt_angle" value="0.0" />  <!-- degrees, matching your cam_angle -->
+        <param name="camera_height" value="0.0" />        <!-- meters above arm base -->
+        <param name="camera_offset_x" value="0.0" />      <!-- meters from arm base -->
+        <param name="camera_frame" value="camera_link" />
+        
+        <!-- Depth Filtering -->
+        <param name="min_depth" value="0.1" />  <!-- meters -->
+        <param name="max_depth" value="3.0" />   <!-- meters -->
+    </node>
+    
+
+</launch>
